@@ -74,6 +74,7 @@ Once deployed, you'll get a URL like: `https://YOUR_USERNAME-ai-workout-correcto
 - Check the build logs in Streamlit Cloud dashboard
 - Verify all files are committed to GitHub
 - Make sure `requirements.txt` and `packages.txt` are in the root directory
+- **Python Version Mismatch:** If you see errors about `mediapipe` not finding a version, ensure your app is running on **Python 3.11**. You can set this in Streamlit Cloud Settings -> General -> Python version.
 
 ### App is slow?
 - First load takes time (cold start)
