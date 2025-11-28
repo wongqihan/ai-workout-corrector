@@ -1,7 +1,6 @@
 
 import os
 import sys
-import streamlit as st
 
 # Force Qt to run in offscreen mode to prevent segfaults in headless environments
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
@@ -9,7 +8,9 @@ os.environ["QT_QPA_PLATFORM"] = "offscreen"
 # Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)
 
-print("DEBUG: Starting app.py execution...", flush=True)
+print("DEBUG: Pre-import streamlit...", flush=True)
+import streamlit as st
+print("DEBUG: Post-import streamlit...", flush=True)
 
 # Global variables for MediaPipe (initialized lazily)
 mp_pose = None
