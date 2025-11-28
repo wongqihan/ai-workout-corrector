@@ -4,9 +4,13 @@ A Streamlit application that uses MediaPipe Pose to track and correct workout fo
 for Squats and Push-ups in real-time.
 """
 
+print("DEBUG: Starting app...")
 import streamlit as st
+print("DEBUG: Imported streamlit")
 import cv2
+print("DEBUG: Imported cv2")
 import mediapipe as mp
+print("DEBUG: Imported mediapipe")
 import numpy as np
 import av
 from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
