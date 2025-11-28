@@ -1,6 +1,7 @@
 
 import os
 import sys
+import streamlit as st
 
 # Force Qt to run in offscreen mode to prevent segfaults in headless environments
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
