@@ -9,27 +9,15 @@ sys.stdout.reconfigure(line_buffering=True)
 
 print("DEBUG: Starting app...", flush=True)
 
-try:
-    import streamlit as st
-    print("DEBUG: Imported streamlit", flush=True)
-except Exception as e:
-    print(f"DEBUG: Failed to import streamlit: {e}", flush=True)
-
-try:
-    import cv2
-    print("DEBUG: Imported cv2", flush=True)
-except Exception as e:
-    print(f"DEBUG: Failed to import cv2: {e}", flush=True)
-
-try:
-    import mediapipe as mp
-    print("DEBUG: Imported mediapipe", flush=True)
-except Exception as e:
-    print(f"DEBUG: Failed to import mediapipe: {e}", flush=True)
-
+# Imports moved inside main() or try-except blocks to prevent startup crashes
 import numpy as np
 import av
 from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
+
+# Global variables for MediaPipe (initialized lazily)
+mp_pose = None
+mp_drawing = None
+mp_drawing_styles = None
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -100,10 +88,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- MediaPipe Initialization ---
-mp_pose = mp.solutions.pose
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
+# --- MediaPipe Initialization (Lazy) ---
+def init_mediapipe():
+    global mp_pose, mp_drawing, mp_drawing_styles
+    import mediapipe as mp
+    mp_pose = mp.solutions.pose
+    mp_drawing = mp.solutions.drawing_utils
+    mp_drawing_styles = mp.solutions.drawing_styles
 
 # --- Helper Functions ---
 
@@ -128,6 +119,7 @@ def draw_text_with_background(img, text, position, font=cv2.FONT_HERSHEY_SIMPLEX
                             font_scale=1, text_color=(255, 255, 255), bg_color=(0, 0, 0), 
                             thickness=2, padding=10, alpha=0.6):
     """Draw text with a semi-transparent background."""
+    import cv2
     (text_width, text_height), baseline = cv2.getTextSize(text, font, font_scale, thickness)
     x, y = position
     
@@ -158,6 +150,9 @@ def draw_text_with_background(img, text, position, font=cv2.FONT_HERSHEY_SIMPLEX
 
 class WorkoutProcessor:
     def __init__(self):
+        if mp_pose is None:
+            init_mediapipe()
+        
         self.pose = mp_pose.Pose(
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5
@@ -244,6 +239,7 @@ class WorkoutProcessor:
         return angle
 
     def recv(self, frame):
+        import cv2
         img = frame.to_ndarray(format="bgr24")
         
         if not self.running:
@@ -293,6 +289,7 @@ class WorkoutProcessor:
 # --- Main App Layout ---
 
 def main():
+    import streamlit as st
     # Initialize session state for controls and shared state
     if 'mode' not in st.session_state:
         st.session_state.mode = "Squat"
