@@ -114,11 +114,11 @@ def calculate_angle(a, b, c):
         
     return angle
 
-def draw_text_with_background(img, text, position, font=cv2.FONT_HERSHEY_SIMPLEX, 
-                            font_scale=1, text_color=(255, 255, 255), bg_color=(0, 0, 0), 
+def draw_text_with_background(img, text, position, font_scale=1, text_color=(255, 255, 255), bg_color=(0, 0, 0), 
                             thickness=2, padding=10, alpha=0.6):
     """Draw text with a semi-transparent background."""
     import cv2
+    font = cv2.FONT_HERSHEY_SIMPLEX
     (text_width, text_height), baseline = cv2.getTextSize(text, font, font_scale, thickness)
     x, y = position
     
