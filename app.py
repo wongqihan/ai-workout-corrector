@@ -1,3 +1,4 @@
+
 import os
 import sys
 
@@ -7,12 +8,7 @@ os.environ["QT_QPA_PLATFORM"] = "offscreen"
 # Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)
 
-print("DEBUG: Starting app...", flush=True)
-
-# Imports moved inside main() or try-except blocks to prevent startup crashes
-import numpy as np
-import av
-from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
+print("DEBUG: Starting app.py execution...", flush=True)
 
 # Global variables for MediaPipe (initialized lazily)
 mp_pose = None
@@ -103,6 +99,7 @@ def calculate_angle(a, b, c):
     Calculate the angle at point b given three points a, b, c.
     Returns angle in degrees.
     """
+    import numpy as np
     a = np.array(a)
     b = np.array(b)
     c = np.array(c)
@@ -209,6 +206,7 @@ class WorkoutProcessor:
         angle = calculate_angle(shoulder, elbow, wrist)
         
         # Back Sag Logic (simplified linear check)
+        import numpy as np
         # Vector from shoulder to ankle
         vec_sa = np.array(ankle) - np.array(shoulder)
         # Vector from shoulder to hip
@@ -240,6 +238,7 @@ class WorkoutProcessor:
 
     def recv(self, frame):
         import cv2
+        import av
         img = frame.to_ndarray(format="bgr24")
         
         if not self.running:
@@ -284,12 +283,14 @@ class WorkoutProcessor:
             draw_text_with_background(img, self.feedback, ('center', 'center'), 
                                     font_scale=1.2, bg_color=(0, 0, 255) if "!" in self.feedback else (0, 255, 0))
 
+        import av
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 # --- Main App Layout ---
 
 def main():
     import streamlit as st
+    from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
     # Initialize session state for controls and shared state
     if 'mode' not in st.session_state:
         st.session_state.mode = "Squat"
@@ -385,4 +386,9 @@ def main():
             st.warning("⚠️ Click 'START' above to begin")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"CRITICAL ERROR in main: {e}", flush=True)
+        import traceback
+        traceback.print_exc()
