@@ -1,5 +1,4 @@
 libgl1
-libgl1-mesa-libgl1
 libglib2.0-0
 ffmpeg
 libsm6
@@ -11,7 +10,6 @@ libgtk-3-0
 libatlas-base-dev
 gfortran
 libhdf5-dev
-libtbb2
 libjpeg-dev
 libpng-dev
 libtiff-dev
