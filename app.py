@@ -1,5 +1,8 @@
-import sys
 import os
+import sys
+
+# Force Qt to run in offscreen mode to prevent segfaults in headless environments
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
 # Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)
