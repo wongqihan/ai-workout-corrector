@@ -1,16 +1,29 @@
-"""
-AI Workout Form Corrector
-A Streamlit application that uses MediaPipe Pose to track and correct workout form
-for Squats and Push-ups in real-time.
-"""
+import sys
+import os
 
-print("DEBUG: Starting app...")
-import streamlit as st
-print("DEBUG: Imported streamlit")
-import cv2
-print("DEBUG: Imported cv2")
-import mediapipe as mp
-print("DEBUG: Imported mediapipe")
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
+
+print("DEBUG: Starting app...", flush=True)
+
+try:
+    import streamlit as st
+    print("DEBUG: Imported streamlit", flush=True)
+except Exception as e:
+    print(f"DEBUG: Failed to import streamlit: {e}", flush=True)
+
+try:
+    import cv2
+    print("DEBUG: Imported cv2", flush=True)
+except Exception as e:
+    print(f"DEBUG: Failed to import cv2: {e}", flush=True)
+
+try:
+    import mediapipe as mp
+    print("DEBUG: Imported mediapipe", flush=True)
+except Exception as e:
+    print(f"DEBUG: Failed to import mediapipe: {e}", flush=True)
+
 import numpy as np
 import av
 from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
